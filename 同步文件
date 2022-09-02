@@ -1,0 +1,23 @@
+    handleInputChange() {
+      const list = this.inputValue.replace(/\D/g, "").split("");
+      let data;
+      if (list.length > 1) {
+        const [a, b] = list;
+        if (a === "0") {
+          data = list[0];
+        } else {
+          if (a === "1") {
+            if (b === "0") {
+              data = "10";
+            } else {
+              data = list[0];
+            }
+          } else {
+            data = "";
+          }
+        }
+      } else {
+        data = list[0];
+      }
+      this.inputValue = data;
+    },

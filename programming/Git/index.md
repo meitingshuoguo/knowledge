@@ -1,29 +1,25 @@
-# [Git配置多个SSH-Key](https://gitee.com/help/labels/19)
-
-
+# [Git 配置多个 SSH-Key](https://gitee.com/help/labels/19)
 
 **背景**
 
-当有多个git账号时，比如：
+当有多个 git 账号时，比如：
 
-  - 一个gitee，用于公司内部的工作开发；
-  -  一个github，用于自己进行一些开发活动；
+- 一个 gitee，用于公司内部的工作开发；
+- 一个 github，用于自己进行一些开发活动；
 
 如果只有一个账号，那就只配置对应的就好了。
 
-
-
 **解决方法**
 
-1. 生成一个公司用的SSH-Key
+1. 生成一个公司用的 SSH-Key
 
    `ssh-keygen -t rsa -C 'xxxxx@company.com' -f ~/.ssh/gitee_id_rsa`
 
-2. 生成一个github用的SSH-Key
+2. 生成一个 github 用的 SSH-Key
 
    `ssh-keygen -t rsa -C 'xxxxx@qq.com' -f ~/.ssh/github_id_rsa`
 
-3. 在 ~/.ssh     目录下新建一个config文件，添加如下内容（其中Host和HostName填写git服务器的域名，IdentityFile指定私钥的路径）
+3. 在 ~/.ssh 目录下新建一个 config 文件，添加如下内容（其中 Host 和 HostName 填写 git 服务器的域名，IdentityFile 指定私钥的路径）
 
    ```
     # gitee
@@ -31,7 +27,7 @@
     HostName gitee.com
     PreferredAuthentications publickey
     IdentityFile ~/.ssh/gitee_id_rsa
-    
+
     # github
     Host github.com
     HostName github.com
@@ -39,25 +35,23 @@
     IdentityFile ~/.ssh/github_id_rsa
    ```
 
-4. 用ssh命令分别测试
+4. 用 ssh 命令分别测试
 
    ```bash
    ssh -T git@gitee.com
    ssh -T git@github.com
    ```
 
-   这里以github为例，成功的话会返回以下内容
+   这里以 github 为例，成功的话会返回以下内容
 
    ```bash
    Connection to github.com port 22 [tcp/ssh] succeeded!
    Hi xxx! You've successfully authenticated, but GitHub does not provide shell access.
    ```
 
-
-
 # 配置个人信息
 
-首次使用git时应该检查其配置文件。
+首次使用 git 时应该检查其配置文件。
 
 Git 自带一个 `git config` 的工具来帮助设置控制 Git 外观和行为的配置变量。 这些变量存储在三个不同的位置：
 
@@ -89,8 +83,6 @@ git config -[-local|-global|-system] [configName] [configValue]
 git config -[-local|-global|-system] --unset [configName]
 ```
 
-
-
 # 打标签
 
 ```bash
@@ -105,73 +97,61 @@ git push origin --delete <tagname>            //删除远程标签
 git checkout -b version2 v2.0.0               //检出标签并新建分支，且切换到该分支
 ```
 
-
-
 ## 文件名大小写问题
 
-​	在Windows和macOS系统中默认是忽略文件名大小写的。（可以测试一下，新建两个大小写不一样的文件，看看它们能否同时存在）
+​ 在 Windows 和 macOS 系统中默认是忽略文件名大小写的。（可以测试一下，新建两个大小写不一样的文件，看看它们能否同时存在）
 
-我在macOS下用系统默认的git拉下来的仓库中git的配置和本地init一个新的git仓库的配置中，core.ignorecase的值默认是true。但是oh-my-zsh中却显示false是默认值。（不晓得为什么）
+我在 macOS 下用系统默认的 git 拉下来的仓库中 git 的配置和本地 init 一个新的 git 仓库的配置中，core.ignorecase 的值默认是 true。但是 oh-my-zsh 中却显示 false 是默认值。（不晓得为什么）
 
-所以在你有时候改动了一些文件名的大小写后默认情况下git是不会识别到的。有三种解决办法:
+所以在你有时候改动了一些文件名的大小写后默认情况下 git 是不会识别到的。有三种解决办法:
 
-* （不推荐）设置 core.ignorecase 为false，使其不忽略这种改动。(这种办法有问题。当设置为false后，重命名某个（已跟踪）文件后，git状态显示的竟然是当前文件未跟踪。所以之前那个文件去哪儿了？[这个配置默认值就是false，但是在init或者clone的时候会自动探测当前系统并将值设置为true（如果合适的话](https://git-scm.com/docs/git-config)）)
-* （推荐）使用命令 git mv [currentName] [newName] 进行改动。此时也不会忽略。（git状态会明确显示这是一个重命名操作）
-* （不推荐）将要重命名的文件删除后提交，再新增新文件提交。
-* **可以新建一个分支，然后把之前分支的东西手动更新过来**
+- （不推荐）设置 core.ignorecase 为 false，使其不忽略这种改动。(这种办法有问题。当设置为 false 后，重命名某个（已跟踪）文件后，git 状态显示的竟然是当前文件未跟踪。所以之前那个文件去哪儿了？[这个配置默认值就是 false，但是在 init 或者 clone 的时候会自动探测当前系统并将值设置为 true（如果合适的话](https://git-scm.com/docs/git-config)）)
+- （推荐）使用命令 git mv [currentName] [newName] 进行改动。此时也不会忽略。（git 状态会明确显示这是一个重命名操作）
+- （不推荐）将要重命名的文件删除后提交，再新增新文件提交。
+- **可以新建一个分支，然后把之前分支的东西手动更新过来**
 
 假如出现问题。
 
-1. 首先新建一个目录，将该项目拉下来，如果提示有文件路径冲突，这时候一般是远程仓库已经跟踪了多个文件名大小写不一样的文件。但clone到本地时，因为本地系统文件大小写不敏感，所以无法让这些同名不同大小写的文件共存。
+1. 首先新建一个目录，将该项目拉下来，如果提示有文件路径冲突，这时候一般是远程仓库已经跟踪了多个文件名大小写不一样的文件。但 clone 到本地时，因为本地系统文件大小写不敏感，所以无法让这些同名不同大小写的文件共存。
 
-   1. 此时在原来的目录下执行 ``` git rm --cached [fileName]``` 如果执行结果为   ```	rm [fileName]``` 表示执行成功。
-   2. ```git commit   git push ``` 将其改动提交到远程仓库。此时可以再按照最开始那一步验证一下远程仓库此时是否已经删除了刚才提交的文件
+   1. 此时在原来的目录下执行 ` git rm --cached [fileName]` 如果执行结果为 ` rm [fileName]` 表示执行成功。
+   2. `git commit git push ` 将其改动提交到远程仓库。此时可以再按照最开始那一步验证一下远程仓库此时是否已经删除了刚才提交的文件
    3. 如果是，此时远程仓库已经没有同名不同大小写的问题
    4. 此时如果本地当前分支更新后还是有问题，需要将有问题的文件所在的文件夹在本地删除，因为可能本地还缓存了被删除的文件。删除后重新更新该文件夹与远程分支同步。该分支一般就正常了。
    5. 如果此时还存在其他分支，并且分支之间切换出现可能与文件名大小写有关的问题，最好是删除所有本地分支后重新新建分支。一般会解决问题。
-   6. 因为此时只有刚才提交了删除文件的分支才是正常的。在其他未进行该操作的分支可能还有同名但不同大小写的文件存在。（因为系统无法同时显示这些文件，所以也只能猜了，在Linux下可能会比较直观的看到）。所以从正常的分支新建的分支才会正常。
-
-   
+   6. 因为此时只有刚才提交了删除文件的分支才是正常的。在其他未进行该操作的分支可能还有同名但不同大小写的文件存在。（因为系统无法同时显示这些文件，所以也只能猜了，在 Linux 下可能会比较直观的看到）。所以从正常的分支新建的分支才会正常。
 
    另一种解决方案
 
    ```bash
    git rm --cached <filename>
-   
+
    mv <old_filename> <new_filename>
-   
+
    git add <new_filename>
-   
+
    git commit -m 'rename <new_filename>' <new_filename>
-   
+
    ```
-
-   
-
-
 
 ## 记住当前用户的登录密码
 
-如果你配了ssh，但是每次拉取或者推送时还需要输入系统当前用户的登录密码时，可以给``` ~/.ssh/config``` 文件加入一行配置  ``` UseKeychain yes``` 
+如果你配了 ssh，但是每次拉取或者推送时还需要输入系统当前用户的登录密码时，可以给` ~/.ssh/config` 文件加入一行配置 ` UseKeychain yes`
 
+# git stash
 
+刚才说过，git stash 可以形成 list 集合。通过 git stash list 可以看到 list 下的 suoy
 
-## git stash
+使用 git stash apply @{x} ，可以将编号 x 的缓存释放出来，但是该缓存还存在于 list 中
 
-刚才说过，git stash 可以形成list 集合。通过git stash list 可以看到list下的suoy
+而 git stash apply，会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录还存在 list 中
 
-使用git stash apply @{x} ，可以将编号x的缓存释放出来，但是该缓存还存在于list中
-
-而 git stash apply，会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录还存在list中
-
-而 git stash pop，也会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录不存在list中
+而 git stash pop，也会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录不存在 list 中
 ————————————————
-版权声明：本文为CSDN博主「Jacob-wj」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+版权声明：本文为 CSDN 博主「Jacob-wj」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
 原文链接：https://blog.csdn.net/wangjia55/java/article/details/8791227
 
-
-
-# 关联远程仓库并将本地仓库推送到GitHub上
+# 关联远程仓库并将本地仓库推送到 GitHub 上
 
 ```bash
 git init
@@ -181,7 +161,8 @@ git commit -m "message"
 
 git remote add origin git@github.com:meitingshuoguo/toy-react.git
 git push -u origin master
-// 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+
+# 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
 ```
 
 # git push
@@ -190,8 +171,6 @@ git push -u origin master
 git push <远程主机名> <本地分支名>:<远程分支名>
 git push -f origin localDev:dev   //强制推送本地分支到远程分支（会覆盖远程分支，慎用）
 ```
-
-
 
 # git cherry-pick
 
@@ -202,7 +181,6 @@ git push -f origin localDev:dev   //强制推送本地分支到远程分支（�
 
 用户解决代码冲突后，第一步将修改的文件重新加入暂存区（git add .），第二步使用下面的命令，让 Cherry pick 过程继续执行。
 
-
 $ git cherry-pick --continue
 （2）--abort
 
@@ -212,15 +190,11 @@ $ git cherry-pick --continue
 
 发生代码冲突后，退出 Cherry pick，但是不回到操作前的样子。
 
-
-
 # git commit
 
 ```bash
 git reset --soft HEAD^   // 撤销本次commit（保留更改）
 ```
-
-
 
 # 本地创建分支后推送到远程（即在本地创建一个远程分支）
 
@@ -233,4 +207,3 @@ git reset --soft HEAD^   // 撤销本次commit（保留更改）
 ```bash
 git checkout -b [本地分支branch_x] origin/[远程分支名name]     //拉取远程分支到本地，并切换到该分支
 ```
-
