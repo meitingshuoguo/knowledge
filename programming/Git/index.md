@@ -148,8 +148,6 @@ git checkout -b version2 v2.0.0               //检出标签并新建分支，�
 
 而 git stash pop，也会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录不存在 list 中
 ————————————————
-版权声明：本文为 CSDN 博主「Jacob-wj」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。
-原文链接：https://blog.csdn.net/wangjia55/java/article/details/8791227
 
 # 关联远程仓库并将本地仓库推送到 GitHub 上
 
@@ -207,3 +205,68 @@ git reset --soft HEAD^   // 撤销本次commit（保留更改）
 ```bash
 git checkout -b [本地分支branch_x] origin/[远程分支名name]     //拉取远程分支到本地，并切换到该分支
 ```
+
+# 修改最近的一次 commit
+
+1. 修改提交的描述
+
+```bash
+git commit --amend
+```
+
+2. 修改提交的内容
+   1. `git add <filename>`
+   2. `git commit --amend`
+   3. `git commit --amend --no-edit` (假如只是修改笔误或者忘记暂存某一个文件，不需要修改提交信息，则可以省略编辑器环节，使用)
+
+# git reflog 和 git log 的区别
+
+- git reflog
+
+  可以查看所有分支的所有操作记录（包括已经被删除的 commit 记录和 reset 的操作）
+
+- git log
+
+  则不能察看已经删除了的 commit 记录
+
+# 忽略文件
+
+1. 只能忽略尚未用 git 管理的文件的修改
+
+   ​ `.gitignore` 和` .git/info/exclude`
+
+   前者会被提交。后者只在本地。对已经纳入 git 管理的文件是不起作用的
+
+2. 如果要忽略已被 git 管理的文件有两种方式
+
+   1. git update-index --skip-worktree []
+
+      ​ 想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
+
+      ​ 因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
+
+      ​ 确认 git ls-files -v | grep ^S
+
+      ​ 撤销 git update-index --no-skip-worktree []
+
+      ​ git ls-files 　 shows all files managed by git.
+
+      ​ -v check the file being ignored.
+
+      ​ --skip-worktree is displayed withS
+
+   2. git update-index --assume-unchanged []
+
+      ​ 简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
+
+      ​ 确认 git ls-files -v | grep ^h
+
+      ​ 撤销 git update-index --no-assume-unchanged path/to/file
+
+一些特殊场景
+
+1. 模板文件忽略
+
+   ​ 对于充当模版的文件，在文件名上加以区分然后用 Git 记住。比如说实际的配置文件应该叫 database.conf，在写好模版之后可以更名为 database.conf.example。Git 记录 database.conf.example 但是忽略 database.conf。
+
+2. 每一个人克隆下来之后，复制一份 database.conf.example 为 database.conf 然后修改后者以符合本地的要求。由于后者是在 .gitignore 里的，所以不会被记录，也完全不需要 update-index。这样一来即避免了副作用，又不会产生冲突问题，

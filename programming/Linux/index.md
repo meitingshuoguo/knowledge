@@ -64,9 +64,6 @@
      PreferredAuthentications publickey
      IdentityFile ~/.ssh/[私钥名称]
 
-     #为git@协议配置socks5代理
-     ProxyCommand nc -v -x 127.0.0.1:7890 %h %p
-
    ```
 
 5. 开启 bbr
