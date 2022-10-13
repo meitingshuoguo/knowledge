@@ -13,11 +13,11 @@
 
 1. 生成一个公司用的 SSH-Key
 
-   `ssh-keygen -t rsa -C 'xxxxx@company.com' -f ~/.ssh/gitee_id_rsa`
+   `ssh-keygen -t ed25519 -C 'xxxxx@company.com' -f ~/.ssh/gitee_id`
 
 2. 生成一个 github 用的 SSH-Key
 
-   `ssh-keygen -t rsa -C 'xxxxx@qq.com' -f ~/.ssh/github_id_rsa`
+   `ssh-keygen -t ed25519 -C 'xxxxx@qq.com' -f ~/.ssh/github_id`
 
 3. 在 ~/.ssh 目录下新建一个 config 文件，添加如下内容（其中 Host 和 HostName 填写 git 服务器的域名，IdentityFile 指定私钥的路径）
 
@@ -26,13 +26,13 @@
     Host gitee.com
     HostName gitee.com
     PreferredAuthentications publickey
-    IdentityFile ~/.ssh/gitee_id_rsa
+    IdentityFile ~/.ssh/gitee_id
 
     # github
     Host github.com
     HostName github.com
     PreferredAuthentications publickey
-    IdentityFile ~/.ssh/github_id_rsa
+    IdentityFile ~/.ssh/github_id
    ```
 
 4. 用 ssh 命令分别测试
@@ -239,29 +239,23 @@ git commit --amend
 
 2. 如果要忽略已被 git 管理的文件有两种方式
 
-   1. git update-index --skip-worktree []
+   1. `git update-index --skip-worktree []`
 
       ​ 想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
 
       ​ 因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
 
-      ​ 确认 git ls-files -v | grep ^S
+      ​ 确认 `git ls-files -v | grep ^S`
 
-      ​ 撤销 git update-index --no-skip-worktree []
+      ​ 撤销 `git update-index --no-skip-worktree []`
 
-      ​ git ls-files 　 shows all files managed by git.
-
-      ​ -v check the file being ignored.
-
-      ​ --skip-worktree is displayed withS
-
-   2. git update-index --assume-unchanged []
+   2. `git update-index --assume-unchanged []`
 
       ​ 简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
 
-      ​ 确认 git ls-files -v | grep ^h
+      ​ 确认 `git ls-files -v | grep ^h`
 
-      ​ 撤销 git update-index --no-assume-unchanged path/to/file
+      ​ 撤销 `git update-index --no-assume-unchanged path/to/file`
 
 一些特殊场景
 
@@ -269,4 +263,4 @@ git commit --amend
 
    ​ 对于充当模版的文件，在文件名上加以区分然后用 Git 记住。比如说实际的配置文件应该叫 database.conf，在写好模版之后可以更名为 database.conf.example。Git 记录 database.conf.example 但是忽略 database.conf。
 
-2. 每一个人克隆下来之后，复制一份 database.conf.example 为 database.conf 然后修改后者以符合本地的要求。由于后者是在 .gitignore 里的，所以不会被记录，也完全不需要 update-index。这样一来即避免了副作用，又不会产生冲突问题，
+2. 每一个人克隆下来之后，复制一份 database.conf.example 为 database.conf 然后修改后者以符合本地的要求。由于后者是在.gitignore 里的，所以不会被记录，也完全不需要 update-index。这样一来即避免了副作用，又不会产生冲突问题，

@@ -26,16 +26,16 @@
 
    1. 本地生成一对 key
 
-      `ssh-keygen -t ed25519 -C "name1"`
+      `ssh-keygen -t ed25519 -C "name1" -f myVps`
 
    2. 把公钥上传到服务器（可能要先在服务器上新建.ssh 文件夹）
 
-      `scp ~/.ssh/kamatera_react_rsa.pub root@xxx:/root/.ssh/`
+      `scp ~/.ssh/myVps.pub root@xxx:/root/.ssh/`
 
    3. 在服务器上执行以下命令
 
       ```bash
-      mv .ssh/id_rsa.pub .ssh/authorized_keys
+      mv .ssh/myVps.pub .ssh/authorized_keys
       chmod 700 .ssh
       chmod 600 .ssh/authorized_keys
 
@@ -50,7 +50,7 @@
 
       下面这个命令可以来测试是不是配置正确了
 
-      `ssh root@xxx.xxx.xxx -p [port] -i ~/.ssh/id_rsa`
+      `ssh root@xxx.xxx.xxx -p [port] -i ~/.ssh/myVps`
 
    5. 用别名登录
 
