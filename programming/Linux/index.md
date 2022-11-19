@@ -51,8 +51,9 @@ colorscheme pablo
     sudo yum install git
     ```
 3. 安装 oh-my-zsh
-<br>
+
     `sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
+    
 4. 插件安装
     1. 需要安装的
 
@@ -90,17 +91,15 @@ colorscheme pablo
 **注意你的密钥文件名生成方式**
 
 1. 如果你是一路回车生成的密钥文件
-<br>
+
     `ssh root@xxx.xxx.xxx`
+    
 2. 如果你是生成的自定义的密钥文件，要注意 `IdentityFile`这个配置。在 config 里配别名登录的时候必须指定这个，因为默认情况下，ssh 只会找系统默认的几个文件名（`/etc/ssh/ssh_config`）
 
-    ```
-    
-    ```
 
 ```bash
-	#ssh root@192.168.182.55 -p 22
-	ssh root@xxx.xxx.xxx -r 'key'
+#ssh root@192.168.182.55 -p 22
+ssh root@xxx.xxx.xxx -r 'key'
 ```
 
 ## 用别名登录
