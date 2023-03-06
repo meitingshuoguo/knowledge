@@ -49,6 +49,8 @@
    Hi xxx! You've successfully authenticated, but GitHub does not provide shell access.
    ```
 
+
+
 # 配置个人信息
 
 首次使用 git 时应该检查其配置文件。
@@ -83,7 +85,9 @@ git config -[-local|-global|-system] [configName] [configValue]
 git config -[-local|-global|-system] --unset [configName]
 ```
 
-# 打标签
+
+
+# git tag
 
 ```bash
 git tag                                       //查看所有标签
@@ -97,9 +101,11 @@ git push origin --delete <tagname>            //删除远程标签
 git checkout -b version2 v2.0.0               //检出标签并新建分支，且切换到该分支
 ```
 
-## 文件名大小写问题
 
-​ 在 Windows 和 macOS 系统中默认是忽略文件名大小写的。（可以测试一下，新建两个大小写不一样的文件，看看它们能否同时存在）
+
+# 文件名大小写问题
+
+ 在 Windows 和 macOS 系统中默认是忽略文件名大小写的。（可以测试一下，新建两个大小写不一样的文件，看看它们能否同时存在）
 
 我在 macOS 下用系统默认的 git 拉下来的仓库中 git 的配置和本地 init 一个新的 git 仓库的配置中，core.ignorecase 的值默认是 true。但是 oh-my-zsh 中却显示 false 是默认值。（不晓得为什么）
 
@@ -125,18 +131,22 @@ git checkout -b version2 v2.0.0               //检出标签并新建分支，�
 
    ```bash
    git rm --cached <filename>
-
+   
    mv <old_filename> <new_filename>
-
+   
    git add <new_filename>
-
+   
    git commit -m 'rename <new_filename>' <new_filename>
-
+   
    ```
 
-## 记住当前用户的登录密码
+
+
+# 记住当前用户的登录密码
 
 如果你配了 ssh，但是每次拉取或者推送时还需要输入系统当前用户的登录密码时，可以给` ~/.ssh/config` 文件加入一行配置 ` UseKeychain yes`
+
+
 
 # git stash
 
@@ -148,6 +158,8 @@ git checkout -b version2 v2.0.0               //检出标签并新建分支，�
 
 而 git stash pop，也会将当前分支的最后一次缓存的内容释放出来，但是刚才的记录不存在 list 中
 ————————————————
+
+
 
 # 关联远程仓库并将本地仓库推送到 GitHub 上
 
@@ -163,12 +175,16 @@ git push -u origin master
 # 由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
 ```
 
+
+
 # git push
 
 ```bash
 git push <远程主机名> <本地分支名>:<远程分支名>
 git push -f origin localDev:dev   //强制推送本地分支到远程分支（会覆盖远程分支，慎用）
 ```
+
+
 
 # git cherry-pick
 
@@ -188,11 +204,24 @@ $ git cherry-pick --continue
 
 发生代码冲突后，退出 Cherry pick，但是不回到操作前的样子。
 
+
+
 # git commit
 
 ```bash
 git reset --soft HEAD^   // 撤销本次commit（保留更改）
+
+# 修改提交的描述
+git commit --amend
+
+# 修改提交的内容
+git add <filename>
+git commit --amend
+# 假如只是修改笔误或者忘记暂存某一个文件，不需要修改提交信息，则可以省略编辑器环节
+git commit --amend --no-edit
 ```
+
+
 
 # 本地创建分支后推送到远程（即在本地创建一个远程分支）
 
@@ -206,18 +235,9 @@ git reset --soft HEAD^   // 撤销本次commit（保留更改）
 git checkout -b [本地分支branch_x] origin/[远程分支名name]     //拉取远程分支到本地，并切换到该分支
 ```
 
-# 修改最近的一次 commit
 
-1. 修改提交的描述
 
-```bash
-git commit --amend
-```
 
-2. 修改提交的内容
-   1. `git add <filename>`
-   2. `git commit --amend`
-   3. `git commit --amend --no-edit` (假如只是修改笔误或者忘记暂存某一个文件，不需要修改提交信息，则可以省略编辑器环节，使用)
 
 # git reflog 和 git log 的区别
 
@@ -229,38 +249,104 @@ git commit --amend
 
   则不能察看已经删除了的 commit 记录
 
-# 忽略文件
+
+
+# .gitignore
 
 1. 只能忽略尚未用 git 管理的文件的修改
 
-   ​ `.gitignore` 和` .git/info/exclude`
+   `.gitignore` 和` .git/info/exclude`
 
    前者会被提交。后者只在本地。对已经纳入 git 管理的文件是不起作用的
 
 2. 如果要忽略已被 git 管理的文件有两种方式
 
-   1. `git update-index --skip-worktree []`
+   1. 只忽略本地的文件
 
-      ​ 想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
+       1. `git update-index --skip-worktree []`
 
-      ​ 因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
 
-      ​ 确认 `git ls-files -v | grep ^S`
+       想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
+    
+       因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
+    
+       确认 `git ls-files -v | grep ^S`
+    
+       撤销 `git update-index --no-skip-worktree []`
+    
+       1. `git update-index --assume-unchanged []`
+    
+       简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
+    
+       确认 `git ls-files -v | grep ^h`
+    
+       撤销 `git update-index --no-assume-unchanged path/to/file`
 
-      ​ 撤销 `git update-index --no-skip-worktree []`
+   2. 需要更新到远程仓库的
 
-   2. `git update-index --assume-unchanged []`
+       ```bash
+       git rm -r --cached .
+       git add .
+       git commit -m "update .gitignore"
+       ```
 
-      ​ 简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
+       
 
-      ​ 确认 `git ls-files -v | grep ^h`
-
-      ​ 撤销 `git update-index --no-assume-unchanged path/to/file`
 
 一些特殊场景
 
 1. 模板文件忽略
 
-   ​ 对于充当模版的文件，在文件名上加以区分然后用 Git 记住。比如说实际的配置文件应该叫 database.conf，在写好模版之后可以更名为 database.conf.example。Git 记录 database.conf.example 但是忽略 database.conf。
+    对于充当模版的文件，在文件名上加以区分然后用 Git 记住。比如说实际的配置文件应该叫 database.conf，在写好模版之后可以更名为 database.conf.example。Git 记录 database.conf.example 但是忽略 database.conf。
 
 2. 每一个人克隆下来之后，复制一份 database.conf.example 为 database.conf 然后修改后者以符合本地的要求。由于后者是在.gitignore 里的，所以不会被记录，也完全不需要 update-index。这样一来即避免了副作用，又不会产生冲突问题，
+
+
+
+# 找回删除的git stash的记录
+
+```bash
+// 找到对应的stash的id	
+git log --graph --decorate --pretty=oneline --abbrev-commit --all $(git fsck --no-reflogs | grep commit | cut -d' ' -f3)
+// 进行处理（下面只是其中一种方式）
+git stash apply 95ccbd927ad4cd413ee2a28014c81454f4ede82c
+```
+
+
+
+# git rebase
+
+**what:** 
+
+提取我们在A分支上的改动，然后应用在B分支的代码上
+
+**how:**
+
+在本地分支中使用 rebase 来合并主分支的改动，是为了让你的本地提交记录清晰可读。（当然， rebase 不只用来合并 master 的改动，还可以在协同开发时 rebase 队友的改动。）
+
+在主分支中使用 merge 来把 feature 分支的改动合并进来，是为了保留分支信息。
+
+**why:**
+
+如果提交存在于你的仓库之外，而别人可能基于这些提交进行开发，那么不要执行变基。
+
+如果你遵循这条金科玉律，就不会出差错。 否则，人民群众会仇恨你，你的朋友和家人也会嘲笑你，唾弃你。
+
+变基操作的实质是丢弃一些现有的提交，然后相应地新建一些内容一样但实际上不同的提交。 如果你已经将提交推送至某个仓库，而其他人也已经从该仓库拉取提交并进行了后续工作，此时，如果你用 `git rebase` 命令重新整理了提交并再次推送，你的同伴因此将不得不再次将他们手头的工作与你的提交进行整合，如果接下来你还要拉取并整合他们修改过的提交，事情就会变得一团糟。
+
+[参考1](https://blog.csdn.net/weixin_42310154/article/details/119004977)
+
+[参考2](在开发过程中使用 git rebase 还是 git merge，优缺点分别是什么？ - 一个小号的回答 - 知乎 https://www.zhihu.com/question/36509119/answer/1990894567)
+
+[参考3](https://zhuanlan.zhihu.com/p/271677627)
+
+# git branch
+
+```bash
+# 显示所有分支
+git branch -a
+# 删除本地分支（-D 强制删除）
+git branch -d|-D  local_branch_name
+# 删除远程分支
+git push remote_name -d remote_branch_name
+```

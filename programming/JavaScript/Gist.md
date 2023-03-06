@@ -34,5 +34,37 @@
   };
 ```
 
+# [验证是否是合法的URL](https://snyk.io/blog/secure-javascript-url-validation/)
 
+```javascript
+function isValidURL(string) {
+    var res = string.match(/(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-
+            ]+[a - zA - Z0 - 9]\.[^\s]{ 2,}| www\.[a - zA - Z0 - 9][a - zA - Z0 - 9 -] + [a - zA - Z0 - 9]
+    \.[^\s]{ 2,}| https ?: \/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|w
+    ww\.[a - zA - Z0 - 9] +\.[^\s]{ 2,}) /gi);
+    return (res !== null);
+};
+
+function checkUrl (string) {
+    let givenURL ;
+    try {
+        givenURL = new URL (string);
+    } catch (error) {
+        console.log ("error is", error);
+       return false; 
+    }
+    return true;
+}
+
+function checkHttpUrl(string) {
+    let givenURL;
+    try {
+        givenURL = new URL(string);
+    } catch (error) {
+        console.log("error is",error)
+      return false;  
+    }
+    return givenURL.protocol === "http:" || givenURL.protocol === "https:";
+}
+```
 
