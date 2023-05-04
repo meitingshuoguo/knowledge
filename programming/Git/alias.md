@@ -14,5 +14,8 @@
 | `gp`    | git push                           |
 | `gm`    | git merge                          |
 | `grb`   | git rebase                         |
+| `gstp`  | `git stash pop`                    |
+
+
 
 [来源](https://kapeli.com/cheat_sheets/Oh-My-Zsh_Git.docset/Contents/Resources/Documents/index)

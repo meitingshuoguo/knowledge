@@ -1,4 +1,6 @@
-# [Git 配置多个 SSH-Key](https://gitee.com/help/labels/19)
+# 配置
+
+## [多个 SSH-Key](https://gitee.com/help/labels/19)
 
 **背景**
 
@@ -49,9 +51,7 @@
    Hi xxx! You've successfully authenticated, but GitHub does not provide shell access.
    ```
 
-
-
-# 配置个人信息
+## 个人信息
 
 首次使用 git 时应该检查其配置文件。
 
@@ -85,7 +85,45 @@ git config -[-local|-global|-system] [configName] [configValue]
 git config -[-local|-global|-system] --unset [configName]
 ```
 
+## 记住当前用户的登录密码
 
+如果你配了 ssh，但是每次拉取或者推送时还需要输入系统当前用户的登录密码时，可以给` ~/.ssh/config` 文件加入一行配置 ` UseKeychain yes`
+
+## git配置中的CRLF、LF、CR
+
+基本
+
+- CRLF: Carriage-Return Line-Feed的缩写，意思是回车换行，即\r\n;
+- LF: Line-Feed的缩写,意思是换行，即\n;
+- CR: Carriage-Return的缩写，回车，即\r;
+
+进阶
+
+当我们敲击回车键(Enter)时，操作系统会插入不可见的字符表示换行，不同的操作系统插入不同
+
+- Windows: 插入\r\n,回车换行；
+- Linux\Unix: 插入\n,换行；
+- MacOS: 插入\r，回车；
+
+Git
+
+1. AutoCRLF
+
+- 提交时转换为LF，检出时转换为CRLF
+  `git config --global core.autocrlf true`
+- 提交时转换为LF，检出时不转换
+  `git config --global core.autocrlf input`
+- 提交检出均不转换
+  `git config --global core.autocrlf false`
+
+2.SafeCRLF
+
+- 拒绝提交包含混合换行符的文件
+  `git config --global core.safecrlf true`
+- 允许提交包含混合换行符的文件
+  `git config --global core.safecrlf false`
+- 提交包含混合换行符的文件时给出警告
+  `git config --global core.safecrlf warn`
 
 # git tag
 
@@ -139,12 +177,6 @@ git checkout -b version2 v2.0.0               //检出标签并新建分支，�
    git commit -m 'rename <new_filename>' <new_filename>
    
    ```
-
-
-
-# 记住当前用户的登录密码
-
-如果你配了 ssh，但是每次拉取或者推送时还需要输入系统当前用户的登录密码时，可以给` ~/.ssh/config` 文件加入一行配置 ` UseKeychain yes`
 
 
 
@@ -221,7 +253,21 @@ git commit --amend
 git commit --amend --no-edit
 ```
 
+## 删除commit
 
+1. 删除最后一次提交
+
+   ```bash
+   git revert HEAD
+   git push origin master
+   ```
+
+2. 删除历史某次提交
+
+   ```bash
+   git rebase -i "commit id"
+   git push origin master -f
+   ```
 
 # 本地创建分支后推送到远程（即在本地创建一个远程分支）
 
@@ -264,23 +310,22 @@ git checkout -b [本地分支branch_x] origin/[远程分支名name]     //拉取
    1. 只忽略本地的文件
 
        1. `git update-index --skip-worktree []`
-
-
-       想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
-    
-       因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
-    
-       确认 `git ls-files -v | grep ^S`
-    
-       撤销 `git update-index --no-skip-worktree []`
-    
-       1. `git update-index --assume-unchanged []`
-    
-       简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
-    
-       确认 `git ls-files -v | grep ^h`
-    
-       撤销 `git update-index --no-assume-unchanged path/to/file`
+       
+          想在本地修改由 Git 管理的文件（或自动更新），但又不想让 Git 管理该更改时，请使用该命令。
+       
+          因为该命令是为了防止 Git 管理本地更改，所以在大多数情况下，我们将使用该命令。
+       
+          确认 `git ls-files -v | grep ^S`
+       
+          撤销 `git update-index --no-skip-worktree []`
+       
+          2. `git update-index --assume-unchanged []`
+       
+                简单来说，当忽略不需要在本地更改(或者不应该更改)的文件时，使用它。
+       
+                确认 `git ls-files -v | grep ^h`
+       
+                撤销 `git update-index --no-assume-unchanged path/to/file`
 
    2. 需要更新到远程仓库的
 
@@ -349,4 +394,8 @@ git branch -a
 git branch -d|-D  local_branch_name
 # 删除远程分支
 git push remote_name -d remote_branch_name
+# 修改分支名称
+git branch -m oldName newName
 ```
+
+

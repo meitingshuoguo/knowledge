@@ -235,6 +235,15 @@ sudo systemctl [start/stop/restart/status] nginx
 //【启用/禁用】开机启动
 sudo systemctl [enable/disable] nginx
 
+#windows
+在安装根路径下cmd
+nginx.exe -v
+nginx.exe start
+nginx.exe -s stop
+nginx.exe -s quit
+nginx.exe -s reload
+tskill nginx
+
 ```
 
 ## 10. 开启 bbr
